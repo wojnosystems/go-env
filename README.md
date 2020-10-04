@@ -36,7 +36,7 @@ name=Chris pet_names_0_=Frankie pet_names_4_=Charlie Addresses_0_street="742 Eve
 
 ```go
 s := myStruct{
-  Name: "chris",
+  Name: "Chris",
   PetNames: []string{
     "Frankie",
     "",
