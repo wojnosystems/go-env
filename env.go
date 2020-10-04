@@ -1,6 +1,7 @@
 package env_parser
 
 import (
+	"github.com/wojnosystems/go-optional-parse-registry"
 	"github.com/wojnosystems/go-parse-register"
 	"reflect"
 	"regexp"
@@ -118,7 +119,7 @@ func (e *Env) envs() envReader {
 	return e.envReader
 }
 
-var defaultParseRegister = parse_register.RegisterGoPrimitives(&parse_register.Registry{})
+var defaultParseRegister = optional_parse_registry.Register(parse_register.RegisterGoPrimitives(&parse_register.Registry{}))
 
 // parseRegistry obtains a copy of the current registry, or uses the default go primitives, for convenience
 func (e *Env) parseRegistry() *parse_register.Registry {

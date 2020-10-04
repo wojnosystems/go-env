@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/wojnosystems/go-optional"
-	"github.com/wojnosystems/go-optional-parse-registry"
-	"github.com/wojnosystems/go-parse-register"
 	"testing"
 	"time"
 )
@@ -63,8 +61,7 @@ func TestEnv_Unmarshall(t *testing.T) {
 		t.Run(caseName, func(t *testing.T) {
 			actual := &appConfigMock{}
 			e := Env{
-				envReader:     c.env,
-				ParseRegistry: optional_parse_registry.Register(parse_register.RegisterGoPrimitives(&parse_register.Registry{})),
+				envReader: c.env,
 			}
 			err := e.Unmarshall(actual)
 			assert.NoError(t, err)
@@ -104,8 +101,7 @@ func TestEnv_UnmarshallErrors(t *testing.T) {
 		t.Run(caseName, func(t *testing.T) {
 			actual := &appConfigMock{}
 			e := Env{
-				envReader:     c.env,
-				ParseRegistry: optional_parse_registry.Register(parse_register.RegisterGoPrimitives(&parse_register.Registry{})),
+				envReader: c.env,
 			}
 			err := e.Unmarshall(actual)
 			if c.expected == nil {
