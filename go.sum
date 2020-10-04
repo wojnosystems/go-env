@@ -21,8 +21,12 @@ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/urfave/cli/v2 v2.2.0/go.mod h1:SE9GqnLQmjVa0iPEY0f1w3ygNIYcIJ0OKPMoW2caLfQ=
 github.com/wojnosystems/go-optional v1.3.0 h1:2zHY5/IzjMAvCjFoBVy1Hq4m6LlyGADjtvIpOTUPG10=
 github.com/wojnosystems/go-optional v1.3.0/go.mod h1:Ryu1VdhTzgkURi1WATQ28FcYVLVAnVtIZKo124B0yAE=
+github.com/wojnosystems/go-optional v1.4.0 h1:puewD7vpP0KZWtXklm/3I8o8oU3p4jLxFBLQxpH3Cac=
+github.com/wojnosystems/go-optional v1.4.0/go.mod h1:Ryu1VdhTzgkURi1WATQ28FcYVLVAnVtIZKo124B0yAE=
 github.com/wojnosystems/go-optional-parse-registry v1.0.0 h1:Fgbsu9r8IZMgoQ8pwHHpqm+xxB69sp3NoBml4YJdNCo=
 github.com/wojnosystems/go-optional-parse-registry v1.0.0/go.mod h1:GZs13zX2ECQ70i/otoH8wCIT1+CXzS1exkmcU+9ZuD4=
+github.com/wojnosystems/go-optional-parse-registry v1.0.1 h1:dQfR/nwDf/mOpAB88gGeO4hVP1qF4MdKdXbwX6BO2ys=
+github.com/wojnosystems/go-optional-parse-registry v1.0.1/go.mod h1:Ew7ce/hUYyc+cEjv6kDGLno0tQXCclPgEkwPfKzYrhA=
 github.com/wojnosystems/go-parse-register v1.0.0 h1:oYGrMY/POYdWENIt3OYR7uthzJ/Es82kr5ctMYWOUCI=
 github.com/wojnosystems/go-parse-register v1.0.0/go.mod h1:Zo4KDblfQiPjM9uWR0YyNLEx22gnpSyBwkAtHzx56E0=
 github.com/wojnosystems/go-sorted-set v1.0.0 h1:RVkn5xYZTYEaHTwWqSCNLq71qmfYC0uTQnMBq5JvvOE=

@@ -15,7 +15,13 @@ func (s *osEnv) Get(envNamed string) string {
 }
 
 func (s *osEnv) Keys(prefix string) (out []string) {
-	for _, key := range os.Environ() {
+	return SelectKeysWithPrefix(os.Environ(), prefix)
+}
+
+// SelectKeysWithPrefix filters the keys to only include those that contain the prefix
+// Offered here as a generic way to filter keys in any implementing interfaces
+func SelectKeysWithPrefix(keys []string, prefix string) (out []string) {
+	for _, key := range keys {
 		if strings.HasPrefix(key, prefix) {
 			out = append(out, key)
 		}

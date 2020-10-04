@@ -5,29 +5,39 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 // Env creates an environment parser given the provided registry
 type Env struct {
+	// envReader is the source of environment variables.
+	// If you leave it blank, it will default to using the operating system environment variables with no prefixes.
 	envReader envReader
-	// ParseRegistry maps go-default and custom types to members of the provided structure
+	// ParseRegistry maps go-default and custom types to members of the provided structure. If left blank, defaults to just Go's primitives being mapped
 	ParseRegistry *parse_register.Registry
 }
 
 // Unmarshall reads the environment variables and writes them to into.
 // into should be a reference to a struct
 // This method will do some basic checks on the into value, but to help developers pass in the correct values
-func (e *Env) Unmarshall(into interface{}) (err error) {
+func (e *Env) UnmarshallWithEmitter(into interface{}, emitter SetReceiver) (err error) {
 	rootV := reflect.ValueOf(into)
 	err = e.validateDestination(rootV, rootV.Type())
 	if err != nil {
 		return
 	}
-	err = e.unmarshall("", rootV.Elem(), rootV.Elem().Type())
+	err = e.unmarshall("", rootV.Elem(), rootV.Elem().Type(), emitter)
 	if err != nil {
 		return
 	}
 	return nil
+}
+
+// Unmarshall reads the environment variables and writes them to into.
+// into should be a reference to a struct
+// This method will do some basic checks on the into value, but to help developers pass in the correct values
+func (e *Env) Unmarshall(into interface{}) (err error) {
+	return e.UnmarshallWithEmitter(into, nil)
 }
 
 // validateDestination does some basic checks to help users of this class avoid common pitfalls with more helpful messages
@@ -45,34 +55,46 @@ func (e *Env) validateDestination(rootV reflect.Value, rootT reflect.Type) (err 
 }
 
 // unmarshall is the internal method, which can be called recursively. This performs the heavy-lifting
-func (e *Env) unmarshall(parentName string, structRefV reflect.Value, structRefT reflect.Type) (err error) {
+func (e *Env) unmarshall(structParentPath string, structRefV reflect.Value, structRefT reflect.Type, emitter SetReceiver) (err error) {
 	for i := 0; i < structRefV.NumField(); i++ {
 		fieldV := structRefV.Field(i)
 		if fieldV.CanSet() {
 			fieldT := structRefT.Field(i)
 			fieldName := fieldNameOrDefault(fieldT)
-			fullPath := nameFromParent(fieldName, parentName)
+			structFullPath := appendStructPath(structParentPath, fieldName)
 
 			if fieldT.Type.Kind() == reflect.Slice {
-				err = e.unmarshallSlice(fullPath, fieldV)
+				err = e.unmarshallSlice(structFullPath, fieldV, emitter)
 				if err != nil {
 					return
 				}
 			} else {
-				envValue := e.envs().Get(fullPath)
+				envValue := e.envs().Get(structToEnvPath(structFullPath))
 				if "" != envValue {
 					var wasCalled bool
 					wasCalled, err = e.parseRegistry().SetValue(fieldV.Addr().Interface(), envValue)
 					if err != nil {
 						return
 					}
-					if !wasCalled {
+					if wasCalled {
+						if emitter != nil {
+							emitter.ReceiveSet(structFullPath, envValue)
+						}
+					} else {
 						// fall back
 						if fieldT.Type.Kind() == reflect.Struct {
-							err = e.unmarshall(fullPath, fieldV, fieldV.Type())
+							err = e.unmarshall(structFullPath, fieldV, fieldV.Type(), emitter)
 							if err != nil {
 								return
 							}
+						}
+					}
+				} else {
+					// fall back
+					if fieldT.Type.Kind() == reflect.Struct {
+						err = e.unmarshall(structFullPath, fieldV, fieldT.Type, emitter)
+						if err != nil {
+							return
 						}
 					}
 				}
@@ -112,8 +134,8 @@ func fieldNameOrDefault(fieldT reflect.StructField) (fieldName string) {
 	return
 }
 
-// nameFromParent concatenates the parent path name with the current field's name
-func nameFromParent(name string, parent string) string {
+// appendStructPath concatenates the parent path name with the current field's name
+func appendStructPath(parent string, name string) string {
 	if parent != "" {
 		return parent + "." + name
 	}
@@ -122,9 +144,9 @@ func nameFromParent(name string, parent string) string {
 
 // unmarshallSlice operates on a slice of objects. It will initialize the slice, then populate all of its members
 // from the environment variables
-func (e *Env) unmarshallSlice(path string, sliceValue reflect.Value) (err error) {
+func (e *Env) unmarshallSlice(sliceFieldPath string, sliceValue reflect.Value, emitter SetReceiver) (err error) {
 	var length int
-	length, err = elementsInSliceWithAddressPrefix(e.envs(), path+"_")
+	length, err = elementsInSliceWithAddressPrefix(e.envs(), structToEnvPath(sliceFieldPath)+"_")
 	if err != nil {
 		return
 	}
@@ -133,7 +155,7 @@ func (e *Env) unmarshallSlice(path string, sliceValue reflect.Value) (err error)
 		sliceValue.Set(newSlice)
 		for i := 0; i < length; i++ {
 			sliceElement := newSlice.Index(i)
-			err = e.unmarshall(path+"_"+strconv.FormatInt(int64(i), 10)+"_", sliceElement, sliceElement.Type())
+			err = e.unmarshall(sliceFieldPath+"["+strconv.FormatInt(int64(i), 10)+"]", sliceElement, sliceElement.Type(), emitter)
 			if err != nil {
 				return
 			}
@@ -163,3 +185,13 @@ func elementsInSliceWithAddressPrefix(env envReader, pathPrefix string) (length 
 }
 
 var envIndexRegexp = regexp.MustCompile(`^(\d+)`)
+
+const replaceWith = "_"
+
+func structToEnvPath(structPath string) (envPath string) {
+	envPath = strings.ReplaceAll(structPath, "].", replaceWith)
+	envPath = strings.ReplaceAll(envPath, ".", replaceWith)
+	envPath = strings.ReplaceAll(envPath, "]", replaceWith)
+	envPath = strings.ReplaceAll(envPath, "[", replaceWith)
+	return
+}

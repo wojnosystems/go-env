@@ -32,11 +32,23 @@ type dbConfigMock struct {
 	Host     optional.String
 	User     optional.String
 	Password optional.String
+	Nested   nestedDbConfigMock
 }
 
 func (m dbConfigMock) IsEqual(o *dbConfigMock) bool {
 	if o == nil {
 		return false
 	}
-	return m.Host.IsEqual(o.Host) && m.User.IsEqual(o.User) && m.Password.IsEqual(o.Password)
+	return m.Host.IsEqual(o.Host) && m.User.IsEqual(o.User) && m.Password.IsEqual(o.Password) && m.Nested.IsEqual(&o.Nested)
+}
+
+type nestedDbConfigMock struct {
+	ConnTimeout optional.Duration
+}
+
+func (m nestedDbConfigMock) IsEqual(o *nestedDbConfigMock) bool {
+	if o == nil {
+		return false
+	}
+	return m.ConnTimeout.IsEqual(o.ConnTimeout)
 }

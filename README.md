@@ -25,6 +25,9 @@ type myStruct struct {
 type addrStruct struct {
   Street string     "env:street"
 }
+
+s := myStruct
+Env{}.Unmarshall(&s)
 ```
 
 The following environment variables can create the following data structure:

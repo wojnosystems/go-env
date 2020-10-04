@@ -6,6 +6,7 @@ import (
 	"github.com/wojnosystems/go-optional-parse-registry"
 	"github.com/wojnosystems/go-parse-register"
 	"testing"
+	"time"
 )
 
 func TestEnv_Unmarshall(t *testing.T) {
@@ -37,6 +38,20 @@ func TestEnv_Unmarshall(t *testing.T) {
 					{},
 					{
 						Host: optional.StringFrom("example.com"),
+					},
+				},
+			},
+		},
+		"db nested": {
+			env: &envMock{
+				mock: map[string]string{
+					"Databases_0_Nested_ConnTimeout": "30s",
+				},
+			},
+			expected: appConfigMock{
+				Databases: []dbConfigMock{
+					{
+						Nested: nestedDbConfigMock{ConnTimeout: optional.DurationFrom(30 * time.Second)},
 					},
 				},
 			},
