@@ -27,10 +27,7 @@ func (e *Env) UnmarshallWithEmitter(into interface{}, emitter SetReceiver) (err 
 		return
 	}
 	err = e.unmarshall("", rootV.Elem(), rootV.Elem().Type(), emitter)
-	if err != nil {
-		return
-	}
-	return nil
+	return
 }
 
 // Unmarshall reads the environment variables and writes them to into.
@@ -74,6 +71,13 @@ func (e *Env) unmarshall(structParentPath string, structRefV reflect.Value, stru
 					var wasCalled bool
 					wasCalled, err = e.parseRegistry().SetValue(fieldV.Addr().Interface(), envValue)
 					if err != nil {
+						err = &ParseError{
+							Path: StructEnvPath{
+								StructPath: structFullPath,
+								EnvPath:    structToEnvPath(structFullPath),
+							},
+							originalErr: err,
+						}
 						return
 					}
 					if wasCalled {
