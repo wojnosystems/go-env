@@ -5,6 +5,6 @@ go 1.14
 require (
 	github.com/stretchr/testify v1.6.1
 	github.com/wojnosystems/go-optional v1.4.0
-	github.com/wojnosystems/go-optional-parse-registry v1.0.1
-	github.com/wojnosystems/go-parse-register v1.0.0
+	github.com/wojnosystems/go-optional-parse-registry v1.1.0
+	github.com/wojnosystems/go-parse-register v1.1.0
 )

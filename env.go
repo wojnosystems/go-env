@@ -15,7 +15,7 @@ type Env struct {
 	// If you leave it blank, it will default to using the operating system environment variables with no prefixes.
 	envReader envReader
 	// ParseRegistry maps go-default and custom types to members of the provided structure. If left blank, defaults to just Go's primitives being mapped
-	ParseRegistry *parse_register.Registry
+	ParseRegistry parse_register.ValueSetter
 }
 
 var (
@@ -125,10 +125,10 @@ func (e *Env) envs() envReader {
 	return e.envReader
 }
 
-var defaultParseRegister = optional_parse_registry.Register(parse_register.RegisterGoPrimitives(&parse_register.Registry{}))
+var defaultParseRegister = optional_parse_registry.NewWithGoPrimitives()
 
 // parseRegistry obtains a copy of the current registry, or uses the default go primitives, for convenience
-func (e *Env) parseRegistry() *parse_register.Registry {
+func (e *Env) parseRegistry() parse_register.ValueSetter {
 	if e.ParseRegistry == nil {
 		e.ParseRegistry = defaultParseRegister
 	}

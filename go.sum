@@ -27,8 +27,12 @@ github.com/wojnosystems/go-optional-parse-registry v1.0.0 h1:Fgbsu9r8IZMgoQ8pwHH
 github.com/wojnosystems/go-optional-parse-registry v1.0.0/go.mod h1:GZs13zX2ECQ70i/otoH8wCIT1+CXzS1exkmcU+9ZuD4=
 github.com/wojnosystems/go-optional-parse-registry v1.0.1 h1:dQfR/nwDf/mOpAB88gGeO4hVP1qF4MdKdXbwX6BO2ys=
 github.com/wojnosystems/go-optional-parse-registry v1.0.1/go.mod h1:Ew7ce/hUYyc+cEjv6kDGLno0tQXCclPgEkwPfKzYrhA=
+github.com/wojnosystems/go-optional-parse-registry v1.1.0 h1:GBpMAvVtEyIF6jaf5Rev+2VVjHf2mPjOwyc2aW1AQZw=
+github.com/wojnosystems/go-optional-parse-registry v1.1.0/go.mod h1:+WJSm9wIELvJAzVu00fz17lhSNueL6bMKy3fefQ0hmI=
 github.com/wojnosystems/go-parse-register v1.0.0 h1:oYGrMY/POYdWENIt3OYR7uthzJ/Es82kr5ctMYWOUCI=
 github.com/wojnosystems/go-parse-register v1.0.0/go.mod h1:Zo4KDblfQiPjM9uWR0YyNLEx22gnpSyBwkAtHzx56E0=
+github.com/wojnosystems/go-parse-register v1.1.0 h1:lxlOtpZG2g3LnUaYYwCMiGZ3wcy5gKUj3XiL42MOF6Q=
+github.com/wojnosystems/go-parse-register v1.1.0/go.mod h1:Zo4KDblfQiPjM9uWR0YyNLEx22gnpSyBwkAtHzx56E0=
 github.com/wojnosystems/go-sorted-set v1.0.0 h1:RVkn5xYZTYEaHTwWqSCNLq71qmfYC0uTQnMBq5JvvOE=
 github.com/wojnosystems/go-sorted-set v1.0.0/go.mod h1:q+tqmuZewraa/mbxEA37MV2qqtep++jTYF6X+taNQqg=
 github.com/wojnosystems/okey-dokey v1.0.0 h1:EtJaF3COBZ0n6f+M/Voh19IaoRHjUEjG0TVxBh3B9G8=
