@@ -5,8 +5,7 @@ import (
 	"strings"
 )
 
-// Implements the default system environment getters
-// this allows us to test this
+// osEnv Implements the default system environment getters
 type osEnv struct {
 }
 
@@ -25,6 +24,9 @@ func SelectKeysWithPrefix(keys []string, prefix string) (out []string) {
 		if strings.HasPrefix(key, prefix) {
 			out = append(out, key)
 		}
+	}
+	if out == nil {
+		out = []string{}
 	}
 	return
 }

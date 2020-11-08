@@ -60,9 +60,7 @@ func TestEnv_Unmarshall(t *testing.T) {
 	for caseName, c := range cases {
 		t.Run(caseName, func(t *testing.T) {
 			actual := &appConfigMock{}
-			e := Env{
-				envReader: c.env,
-			}
+			e := NewWithEnvReader(c.env)
 			err := e.Unmarshall(actual)
 			assert.NoError(t, err)
 			assert.True(t, c.expected.IsEqual(actual))
@@ -82,7 +80,7 @@ func TestEnv_UnmarshallErrors(t *testing.T) {
 				},
 			},
 		},
-		"field does not parse": {
+		"time field does not parse": {
 			env: &envMock{
 				mock: map[string]string{
 					"Databases_0_Nested_ConnTimeout": "P30s",
@@ -96,13 +94,39 @@ func TestEnv_UnmarshallErrors(t *testing.T) {
 				originalErr: fmt.Errorf("time: invalid duration P30s"),
 			},
 		},
+		"int field does not parse": {
+			env: &envMock{
+				mock: map[string]string{
+					"ThreadCount": "P",
+				},
+			},
+			expected: &ParseError{
+				Path: StructEnvPath{
+					StructPath: "ThreadCount",
+					EnvPath:    "ThreadCount",
+				},
+				originalErr: fmt.Errorf(`strconv.ParseInt: parsing "P": invalid syntax`),
+			},
+		},
+		"slice length field does not parse": {
+			env: &envMock{
+				mock: map[string]string{
+					"Databases_9999999999999999999999999999999999999999999999999999999999999999_.Host": "P",
+				},
+			},
+			expected: &ParseError{
+				Path: StructEnvPath{
+					StructPath: "Databases",
+					EnvPath:    "Databases",
+				},
+				originalErr: fmt.Errorf(`strconv.ParseInt: parsing "9999999999999999999999999999999999999999999999999999999999999999": value out of range`),
+			},
+		},
 	}
 	for caseName, c := range cases {
 		t.Run(caseName, func(t *testing.T) {
 			actual := &appConfigMock{}
-			e := Env{
-				envReader: c.env,
-			}
+			e := NewWithEnvReader(c.env)
 			err := e.Unmarshall(actual)
 			if c.expected == nil {
 				assert.NoError(t, err)
