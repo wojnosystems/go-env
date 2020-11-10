@@ -23,7 +23,8 @@ func (e *envInternal) SetValue(structFullPath string, fieldV reflect.Value) (han
 	envValue := e.envReader.Get(envPath)
 	if "" != envValue {
 		// Some environment value was set, use it
-		handled, err = e.parseRegistry.SetValue(fieldV.Addr().Interface(), envValue)
+		valueDst := fieldV.Addr().Interface()
+		handled, err = e.parseRegistry.SetValue(valueDst, envValue)
 		if err != nil {
 			err = wrapWithParseError(err, structFullPath, envPath)
 			return
@@ -66,8 +67,4 @@ func structToEnvPath(structPath string) (envPath string) {
 	envPath = strings.ReplaceAll(envPath, "]", replaceWith)
 	envPath = strings.ReplaceAll(envPath, "[", replaceWith)
 	return
-}
-
-func (e *envInternal) FieldName(structParentPath string, structParent reflect.Type, fieldT reflect.StructField) (names string) {
-	return fieldT.Tag.Get("env")
 }

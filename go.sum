@@ -16,6 +16,10 @@ github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/wojnosystems/go-into-struct v0.0.1 h1:Bp7OWAVEyt42FNwL5hnMj7d87YniW0+XsIfApCi8LY4=
 github.com/wojnosystems/go-into-struct v0.0.1/go.mod h1:oEuok6rPiBA+ug952rrfH4X17VVulbujQmiKaog5rt0=
+github.com/wojnosystems/go-into-struct v0.0.2 h1:jHigsf6HiecommsYkW4CKK3bCnG/s/ZQK+fDo0lqp74=
+github.com/wojnosystems/go-into-struct v0.0.2/go.mod h1:oEuok6rPiBA+ug952rrfH4X17VVulbujQmiKaog5rt0=
+github.com/wojnosystems/go-into-struct v0.0.3 h1:FBMkBmTii0uIQv9exK/nddUFLkJBWYvqA/AoFuG8+jI=
+github.com/wojnosystems/go-into-struct v0.0.3/go.mod h1:oEuok6rPiBA+ug952rrfH4X17VVulbujQmiKaog5rt0=
 github.com/wojnosystems/go-optional v1.4.0 h1:puewD7vpP0KZWtXklm/3I8o8oU3p4jLxFBLQxpH3Cac=
 github.com/wojnosystems/go-optional v1.4.0/go.mod h1:Ryu1VdhTzgkURi1WATQ28FcYVLVAnVtIZKo124B0yAE=
 github.com/wojnosystems/go-optional-parse-registry v1.1.2 h1:riN+3k2ewRvGUtgclCQK0BBx69a1AVcxOOBlaA7FGHw=
