@@ -18,7 +18,7 @@ type envInternal struct {
 }
 
 // SetValue
-func (e *envInternal) SetValue(structFullPath string, fieldV reflect.Value) (handled bool, err error) {
+func (e *envInternal) SetValue(structFullPath string, fieldV reflect.Value, structField reflect.StructField) (handled bool, err error) {
 	envPath := structToEnvPath(structFullPath)
 	envValue := e.envReader.Get(envPath)
 	if "" != envValue {
@@ -37,7 +37,7 @@ func (e *envInternal) SetValue(structFullPath string, fieldV reflect.Value) (han
 	return
 }
 
-func (e *envInternal) SliceLen(structFullPath string) (length int, err error) {
+func (e *envInternal) SliceLen(structFullPath string, fieldV reflect.Value, structField reflect.StructField) (length int, err error) {
 	envPath := structToEnvPath(structFullPath)
 	pathPrefix := envPath + "_"
 	maxIndex := int64(-1)
