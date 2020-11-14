@@ -1,4 +1,4 @@
-module github.com/wojnosystems/go-env
+module github.com/wojnosystems/go-env/v2
 
 go 1.14
 

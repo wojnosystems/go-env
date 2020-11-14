@@ -1,4 +1,4 @@
-package env_parser
+package v2
 
 type StructEnvPath struct {
 	StructPath string

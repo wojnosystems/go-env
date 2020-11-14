@@ -1,4 +1,4 @@
-package env_parser
+package v2
 
 import (
 	into_struct "github.com/wojnosystems/go-into-struct"

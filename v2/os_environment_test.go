@@ -1,4 +1,4 @@
-package env_parser
+package v2
 
 import (
 	"github.com/stretchr/testify/assert"
