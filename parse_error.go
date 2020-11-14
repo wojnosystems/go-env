@@ -7,16 +7,16 @@ type ParseError struct {
 	originalErr error
 }
 
-func wrapWithParseError(err error, structPath string, envPath string) *ParseError {
+func newParseError(structPath string, envPath string, original error) *ParseError {
 	return &ParseError{
 		Path: StructEnvPath{
 			StructPath: structPath,
 			EnvPath:    envPath,
 		},
-		originalErr: err,
+		originalErr: original,
 	}
 }
 
 func (p *ParseError) Error() string {
-	return fmt.Sprintf("environment variable '%s' failed to parse '%s'", p.Path.EnvPath, p.originalErr.Error())
+	return fmt.Sprintf("environment variable '%s' failed to parse because %s", p.Path.EnvPath, p.originalErr.Error())
 }

@@ -1,5 +1,7 @@
 package env_parser
 
+import into_struct "github.com/wojnosystems/go-into-struct"
+
 // envReader reads environment variables
 type envReader interface {
 	// Get the value of a single environment with the name envNamed
@@ -14,5 +16,5 @@ type SetReceiver interface {
 	// structPath where the value was set in the structure in go. base.value[index].othervalue = value
 	// envName is the environment variable used to look up the value
 	// value is what was read from the environment for the envName key
-	ReceiveSet(structPath string, envName string, value string)
+	ReceiveSet(structPath into_struct.Path, envName string, value string)
 }

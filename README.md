@@ -41,11 +41,11 @@ name=Chris pet_names_0_=Frankie pet_names_4_=Charlie Addresses_0_street="742 Eve
 s := myStruct{
   Name: "Chris",
   PetNames: []string{
-    "Frankie",
-    "",
-    "", // Charlie was index 4, so we created 3 blank strings in between as this is an array
-    "",
-    "Charlie",
+    "Frankie", // index:0
+    "",        // index:1
+    "",        // Charlie was index 4, so we created 3 blank strings in between as this is an array
+    "",        // index:3
+    "Charlie", // index:4
   },
   Addresses: []addrStruct{
     {

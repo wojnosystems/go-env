@@ -9,7 +9,7 @@ import (
 
 // Env creates an environment parser given the provided registry
 type Env struct {
-	envInternal
+	config envInternal
 }
 
 func New() *Env {
@@ -18,7 +18,7 @@ func New() *Env {
 
 func NewWithParseRegistryEmitterEnvReader(parseRegistry parse_register.ValueSetter, emitter SetReceiver, reader envReader) *Env {
 	return &Env{
-		envInternal{
+		config: envInternal{
 			envReader:     reader,
 			parseRegistry: parseRegistry,
 			emitter:       emitter,
@@ -46,7 +46,7 @@ func NewWithParseRegistryWithEmitter(registry parse_register.ValueSetter, emitte
 // into should be a reference to a struct
 // This method will do some basic checks on the into value, but to help developers pass in the correct values
 func (e *Env) Unmarshall(into interface{}) (err error) {
-	return into_struct.Unmarshall(into, e)
+	return into_struct.Unmarshall(into, &e.config)
 }
 
 var (

@@ -1,7 +1,6 @@
 package env_parser
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/wojnosystems/go-optional"
 	"testing"
@@ -44,7 +43,7 @@ func TestEnv_Unmarshall(t *testing.T) {
 		"db nested": {
 			env: &envMock{
 				mock: map[string]string{
-					"Databases_0_Nested_ConnTimeout": "30s",
+					"Databases_0_NEST_TIMEOUT": "30s",
 				},
 			},
 			expected: appConfigMock{
@@ -71,7 +70,7 @@ func TestEnv_Unmarshall(t *testing.T) {
 func TestEnv_UnmarshallErrors(t *testing.T) {
 	cases := map[string]struct {
 		env      *envMock
-		expected error
+		expected string
 	}{
 		"field does not exist": {
 			env: &envMock{
@@ -83,16 +82,10 @@ func TestEnv_UnmarshallErrors(t *testing.T) {
 		"time field does not parse": {
 			env: &envMock{
 				mock: map[string]string{
-					"Databases_0_Nested_ConnTimeout": "P30s",
+					"Databases_0_NEST_TIMEOUT": "P30s",
 				},
 			},
-			expected: &ParseError{
-				Path: StructEnvPath{
-					StructPath: "Databases[0].Nested.ConnTimeout",
-					EnvPath:    "Databases_0_Nested_ConnTimeout",
-				},
-				originalErr: fmt.Errorf("time: invalid duration P30s"),
-			},
+			expected: `environment variable 'Databases_0_NEST_TIMEOUT' failed to parse because time: invalid duration P30s`,
 		},
 		"int field does not parse": {
 			env: &envMock{
@@ -100,13 +93,7 @@ func TestEnv_UnmarshallErrors(t *testing.T) {
 					"ThreadCount": "P",
 				},
 			},
-			expected: &ParseError{
-				Path: StructEnvPath{
-					StructPath: "ThreadCount",
-					EnvPath:    "ThreadCount",
-				},
-				originalErr: fmt.Errorf(`strconv.ParseInt: parsing "P": invalid syntax`),
-			},
+			expected: `environment variable 'ThreadCount' failed to parse because strconv.ParseInt: parsing "P": invalid syntax`,
 		},
 		"slice length field does not parse": {
 			env: &envMock{
@@ -114,13 +101,7 @@ func TestEnv_UnmarshallErrors(t *testing.T) {
 					"Databases_9999999999999999999999999999999999999999999999999999999999999999_.Host": "P",
 				},
 			},
-			expected: &ParseError{
-				Path: StructEnvPath{
-					StructPath: "Databases",
-					EnvPath:    "Databases",
-				},
-				originalErr: fmt.Errorf(`strconv.ParseInt: parsing "9999999999999999999999999999999999999999999999999999999999999999": value out of range`),
-			},
+			expected: `environment variable 'Databases' failed to parse because strconv.ParseInt: parsing "9999999999999999999999999999999999999999999999999999999999999999": value out of range`,
 		},
 	}
 	for caseName, c := range cases {
@@ -128,10 +109,10 @@ func TestEnv_UnmarshallErrors(t *testing.T) {
 			actual := &appConfigMock{}
 			e := NewWithEnvReader(c.env)
 			err := e.Unmarshall(actual)
-			if c.expected == nil {
+			if c.expected == "" {
 				assert.NoError(t, err)
 			} else {
-				assert.EqualError(t, err, c.expected.Error())
+				assert.EqualError(t, err, c.expected)
 			}
 		})
 	}

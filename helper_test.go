@@ -23,7 +23,9 @@ func (m appConfigMock) IsEqual(o *appConfigMock) bool {
 		return false
 	}
 	for i, database := range m.Databases {
-		database.IsEqual(&o.Databases[i])
+		if !database.IsEqual(&o.Databases[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -32,7 +34,7 @@ type dbConfigMock struct {
 	Host     optional.String
 	User     optional.String
 	Password optional.String
-	Nested   nestedDbConfigMock
+	Nested   nestedDbConfigMock `env:"NEST"`
 }
 
 func (m dbConfigMock) IsEqual(o *dbConfigMock) bool {
@@ -43,7 +45,7 @@ func (m dbConfigMock) IsEqual(o *dbConfigMock) bool {
 }
 
 type nestedDbConfigMock struct {
-	ConnTimeout optional.Duration
+	ConnTimeout optional.Duration `env:"TIMEOUT"`
 }
 
 func (m nestedDbConfigMock) IsEqual(o *nestedDbConfigMock) bool {

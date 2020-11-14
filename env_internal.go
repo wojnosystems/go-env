@@ -1,8 +1,9 @@
 package env_parser
 
 import (
+	"fmt"
+	into_struct "github.com/wojnosystems/go-into-struct"
 	parse_register "github.com/wojnosystems/go-parse-register"
-	"reflect"
 	"strconv"
 	"strings"
 )
@@ -18,15 +19,19 @@ type envInternal struct {
 }
 
 // SetValue
-func (e *envInternal) SetValue(structFullPath string, fieldV reflect.Value, structField reflect.StructField) (handled bool, err error) {
+func (e *envInternal) SetValue(structFullPath into_struct.Path) (handled bool, err error) {
+	field := structFullPath.Top()
+	if field == nil {
+		return
+	}
 	envPath := structToEnvPath(structFullPath)
 	envValue := e.envReader.Get(envPath)
 	if "" != envValue {
 		// Some environment value was set, use it
-		valueDst := fieldV.Addr().Interface()
+		valueDst := field.Value().Addr().Interface()
 		handled, err = e.parseRegistry.SetValue(valueDst, envValue)
 		if err != nil {
-			err = wrapWithParseError(err, structFullPath, envPath)
+			err = newParseError(structFullPath.String(), envPath, err)
 			return
 		}
 		if handled {
@@ -37,7 +42,7 @@ func (e *envInternal) SetValue(structFullPath string, fieldV reflect.Value, stru
 	return
 }
 
-func (e *envInternal) SliceLen(structFullPath string, fieldV reflect.Value, structField reflect.StructField) (length int, err error) {
+func (e *envInternal) SliceLen(structFullPath into_struct.Path) (length int, err error) {
 	envPath := structToEnvPath(structFullPath)
 	pathPrefix := envPath + "_"
 	maxIndex := int64(-1)
@@ -47,7 +52,7 @@ func (e *envInternal) SliceLen(structFullPath string, fieldV reflect.Value, stru
 			var index int64
 			index, err = strconv.ParseInt(possibleNumber, 10, 0)
 			if err != nil {
-				err = wrapWithParseError(err, structFullPath, envPath)
+				err = newParseError(structFullPath.String(), envPath, err)
 				return
 			}
 			if index > maxIndex {
@@ -59,12 +64,28 @@ func (e *envInternal) SliceLen(structFullPath string, fieldV reflect.Value, stru
 	return
 }
 
-const replaceWith = "_"
+const envFieldSeparator = "_"
 
-func structToEnvPath(structPath string) (envPath string) {
-	envPath = strings.ReplaceAll(structPath, "].", replaceWith)
-	envPath = strings.ReplaceAll(envPath, ".", replaceWith)
-	envPath = strings.ReplaceAll(envPath, "]", replaceWith)
-	envPath = strings.ReplaceAll(envPath, "[", replaceWith)
-	return
+func structToEnvPath(structPath into_struct.Path) string {
+	envParts := make([]string, 0, len(structPath.Parts()))
+	for _, pathPart := range structPath.Parts() {
+		fieldEnvName := pathPart.StructField().Tag.Get("env")
+		if fieldEnvName == "" {
+			fieldEnvName = pathPart.StructField().Name
+		}
+		switch t := pathPart.(type) {
+		case into_struct.PathSliceParter:
+			envParts = append(envParts, fmt.Sprintf("%s%s%d%s", fieldEnvName, envFieldSeparator, t.Index(), envFieldSeparator))
+		default:
+			envParts = append(envParts, fieldEnvName)
+		}
+	}
+	sb := strings.Builder{}
+	for i, part := range envParts {
+		sb.WriteString(part)
+		if i < len(envParts)-1 && !strings.HasSuffix(part, envFieldSeparator) {
+			sb.WriteString(envFieldSeparator)
+		}
+	}
+	return sb.String()
 }
