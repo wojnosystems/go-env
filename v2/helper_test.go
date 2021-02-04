@@ -3,7 +3,7 @@ package v2
 // Defines a set of objects used with testing
 
 import (
-	"github.com/wojnosystems/go-optional"
+	"github.com/wojnosystems/go-optional/v2"
 )
 
 type appConfigMock struct {

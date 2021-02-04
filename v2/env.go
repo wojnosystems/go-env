@@ -2,7 +2,7 @@ package v2
 
 import (
 	into_struct "github.com/wojnosystems/go-into-struct"
-	"github.com/wojnosystems/go-optional-parse-registry"
+	"github.com/wojnosystems/go-optional-parse-registry/v2"
 	"github.com/wojnosystems/go-parse-register"
 	"regexp"
 )
