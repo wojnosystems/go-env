@@ -18,12 +18,12 @@ Example variable naming scheme:
 
 ```go
 type myStruct struct {
-  Name      string     "env:name"
-  PetNames  []string   "env:pet_names"
-  Addresses addrStruct // no tag, assumes "Addresses"
+Name      string     `env:"name"`
+PetNames  []string   `env:"pet_names"`
+Addresses addrStruct // no tag, assumes "Addresses"
 }
 type addrStruct struct {
-  Street string     "env:street"
+Street string     `env:"street"`
 }
 
 s := myStruct

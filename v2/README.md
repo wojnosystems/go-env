@@ -2,6 +2,10 @@
 
 Reads environment variables and unmarshalls them into your structures.
 
+## Install
+
+`go get github.com/wojnosystems/go-env/v2`
+
 This was originally intended to be used for reading environment variables into a structure and then validating those structures for a more intelligent configuration system for Go apps.
 
 Because of the limitations of environment variables from the shell's perspective, we're limited to the following character set for valid environment variable names:
@@ -18,12 +22,12 @@ Example variable naming scheme:
 
 ```go
 type myStruct struct {
-  Name      string     "env:name"
-  PetNames  []string   "env:pet_names"
+  Name      string     `env:"name"`
+  PetNames  []string   `env:"pet_names"`
   Addresses addrStruct // no tag, assumes "Addresses"
 }
 type addrStruct struct {
-  Street string     "env:street"
+  Street string     `env:"street"`
 }
 
 s := myStruct
