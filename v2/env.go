@@ -16,7 +16,7 @@ func New() *Env {
 	return NewWithParseRegistryEmitterEnvReader(defaultParseRegister, defaultNoOpSetReceiver, defaultEnvReader)
 }
 
-func NewWithParseRegistryEmitterEnvReader(parseRegistry parse_register.ValueSetter, emitter SetReceiver, reader envReader) *Env {
+func NewWithParseRegistryEmitterEnvReader(parseRegistry parse_register.ValueSetter, emitter SetReceiver, reader EnvReader) *Env {
 	return &Env{
 		config: envInternal{
 			envReader:     reader,
@@ -30,7 +30,7 @@ func NewWithParseRegistry(registry parse_register.ValueSetter) *Env {
 	return NewWithParseRegistryEmitterEnvReader(registry, defaultNoOpSetReceiver, defaultEnvReader)
 }
 
-func NewWithEnvReader(reader envReader) *Env {
+func NewWithEnvReader(reader EnvReader) *Env {
 	return NewWithParseRegistryEmitterEnvReader(defaultParseRegister, defaultNoOpSetReceiver, reader)
 }
 

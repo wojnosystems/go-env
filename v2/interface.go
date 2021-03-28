@@ -2,8 +2,8 @@ package v2
 
 import into_struct "github.com/wojnosystems/go-into-struct"
 
-// envReader reads environment variables
-type envReader interface {
+// EnvReader reads environment variables
+type EnvReader interface {
 	// Get the value of a single environment with the name envNamed
 	Get(envNamed string) string
 	// Keys get a list of keys that begin with the prefix. If "" is passed, matches all and returns all keys

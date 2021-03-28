@@ -12,7 +12,7 @@ import (
 type envInternal struct {
 	// envReader is the source of environment variables.
 	// If you leave it blank, it will default to using the operating system environment variables with no prefixes.
-	envReader envReader
+	envReader EnvReader
 	// ParseRegistry maps go-default and custom types to members of the provided structure. If left blank, defaults to just Go's primitives being mapped
 	parseRegistry parse_register.ValueSetter
 	emitter       SetReceiver
