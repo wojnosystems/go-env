@@ -50,7 +50,7 @@ func (e *Env) Unmarshall(into interface{}) (err error) {
 }
 
 var (
-	defaultEnvReader       = &osEnv{}
+	defaultEnvReader       = &OsEnv{}
 	defaultNoOpSetReceiver = &SetReceiverNoOp{}
 	defaultParseRegister   = optional_parse_registry.NewWithGoPrimitives()
 	envIndexRegexp         = regexp.MustCompile(`^(\d+)`)

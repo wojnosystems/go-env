@@ -5,15 +5,15 @@ import (
 	"strings"
 )
 
-// osEnv Implements the default system environment getters
-type osEnv struct {
+// OsEnv Implements the default system environment getters
+type OsEnv struct {
 }
 
-func (s *osEnv) Get(envNamed string) string {
+func (s *OsEnv) Get(envNamed string) string {
 	return os.Getenv(envNamed)
 }
 
-func (s *osEnv) Keys(prefix string) (out []string) {
+func (s *OsEnv) Keys(prefix string) (out []string) {
 	return SelectKeysWithPrefix(os.Environ(), prefix)
 }
 
